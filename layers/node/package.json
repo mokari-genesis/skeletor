@@ -1,0 +1,11 @@
+{
+  "name": "layers",
+  "version": "1.0.0",
+  "description": "All node modules for all lambdas",
+  "author": "mokari",
+  "license": "MIT",
+  "dependencies": {
+    "mssql": "^9.1.1"
+  },
+  "devDependencies": {}
+}

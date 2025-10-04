@@ -1,0 +1,16 @@
+{
+  "name": "appTracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "local": "AWS_PROFILE=moocho-dev ./node_modules/.bin/nodemon --watch ../.. --ext js,yml --exec './node_modules/.bin/serverless offline --stage localhost'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.347.0",
+    "nodemon": "^2.0.22",
+    "serverless-offline": "^12.0.4"
+  }
+}

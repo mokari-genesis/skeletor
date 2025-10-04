@@ -1,0 +1,25 @@
+service: layers
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs18.x
+
+layers:
+  nodejs:
+    name: slsv2-${opt:stage, 'dev'}-layers
+    description: "slsv2 dependencies"
+    path: ../layers
+    compatibleRuntimes:
+      - nodejs18.x
+      - nodejs16.x
+
+resources:
+  Outputs:
+    NodejsLayerExport:
+      Value:
+        Ref: NodejsLambdaLayer
+      Export:
+        Name: slsv2-${opt:stage, 'dev'}-NodejsLambdaLayer

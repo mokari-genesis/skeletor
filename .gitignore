@@ -1,0 +1,53 @@
+# Config Files
+.DS_Store
+.vs_code
+.idea
+_notes
+_scratch
+testService
+awsCognitoService/credentials.json
+
+# Temp Files
+userListService/.sls-simulate-registry
+userListService/docker
+**/credentials.json
+
+# Scratch Files
+graphql/test_schema.js
+test/util.js
+test/userListService/definitionReadTest.js
+testService
+_scratch
+test/userListService/definitionReadTest.js
+test/util.js
+
+# Build Files
+node_modules
+**/node_modules
+**/.serverless
+*.zip
+_scratch
+**/credentials.json
+test/util.js
+userListService/.sls-simulate-registry
+userListService/docker
+userService/userService.zip
+**/.serverless
+test/userListService/definitionReadTest.js
+**/credentials.json
+commons/credentials.json
+awsCognitoService/test.js
+.history
+.vscode
+
+serverless-api\.iml
+services/linkedData/package-lock.json
+*.rdb
+*.p12
+*.pem
+
+# Don't mix npm & yarn: ignore all yarn.lock files
+**/yarn.lock
+
+# Doc files
+**/documentation
