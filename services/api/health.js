@@ -1,6 +1,6 @@
-const utils = require('libs/utils')
+import * as utils from '../../libs/utils.js'
 
-module.exports.getHealth = async event => {
+export const getHealth = async event => {
   return {
     msg: 'OK',
     date: new Date(),

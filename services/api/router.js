@@ -1,6 +1,6 @@
-const healthRouter = require('./routes/index')
+import healthRouter from './routes/index.js'
 
-module.exports.router = () => {
+export const router = () => {
   const routes = [
     {
       proxy: 'core',

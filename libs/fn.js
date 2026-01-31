@@ -1,6 +1,6 @@
-const { Logger } = require('libs/logger')
+import { Logger } from './logger.js'
 
-async function attemptWithRetry(fn, { maxRetries = 2, delay = 1000 } = {}) {
+export async function attemptWithRetry(fn, { maxRetries = 2, delay = 1000 } = {}) {
   let retries = 0
   let result
 
@@ -23,7 +23,7 @@ async function attemptWithRetry(fn, { maxRetries = 2, delay = 1000 } = {}) {
 // serverless-offline does not correctly handle errors in async lambdas.  This
 // will wrap the lambda in a try/catch so it doesn't crash the server, and
 // instead matches the dev/prod behavior.
-function catchLocally(fn) {
+export function catchLocally(fn) {
   if (process.env.STAGE !== 'localhost') {
     return fn
   }
@@ -38,7 +38,7 @@ function catchLocally(fn) {
   }
 }
 
-function getRouteFromRequest({ routes, request }) {
+export function getRouteFromRequest({ routes, request }) {
   return routes.find(route => {
     const match = request.path.match(
       new RegExp(
@@ -54,7 +54,7 @@ function getRouteFromRequest({ routes, request }) {
   })
 }
 
-function getParamsFromRequest(route, request) {
+export function getParamsFromRequest(route, request) {
   const params = {
     ...request.body,
     ...request.queryStringParameters,
@@ -75,7 +75,7 @@ function getParamsFromRequest(route, request) {
   return params
 }
 
-function getRoutes(allRoutes) {
+export function getRoutes(allRoutes) {
   return allRoutes
     .map(proxy =>
       proxy.routes.map(route => ({
@@ -86,7 +86,7 @@ function getRoutes(allRoutes) {
     .flat()
 }
 
-function parseEvent(event) {
+export function parseEvent(event) {
   const { body, httpMethod, path, queryStringParameters, headers, requestContext } = event
 
   const parsedEvent = {
@@ -117,7 +117,7 @@ function parseEvent(event) {
  * @param {Function} [delayStrategy] - A function that determines the delay between retries.
  * @return {Promise} A promise that resolves with the result of the asynchronous function, or rejects with the error from the last attempt.
  */
-async function retryAsync(fn, maxRetries, delayStrategy) {
+export async function retryAsync(fn, maxRetries, delayStrategy) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await fn()
@@ -136,7 +136,7 @@ async function retryAsync(fn, maxRetries, delayStrategy) {
   }
 }
 
-function deviceIdChecker({ deviceId }) {
+export function deviceIdChecker({ deviceId }) {
   if (!deviceId) {
     Logger.info('no deviceId provided')
     return false
@@ -154,15 +154,4 @@ function deviceIdChecker({ deviceId }) {
   }*/
 
   return true
-}
-
-module.exports = {
-  catchLocally,
-  attemptWithRetry,
-  getParamsFromRequest,
-  getRouteFromRequest,
-  getRoutes,
-  parseEvent,
-  retryAsync,
-  deviceIdChecker,
 }

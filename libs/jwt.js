@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken')
-const jwkToPem = require('jwk-to-pem')
+import jwt from 'jsonwebtoken'
+import jwkToPem from 'jwk-to-pem'
 
 // See https://jwt.io/introduction for JWT decoding.
 function base64Decode(token) {
@@ -8,14 +8,14 @@ function base64Decode(token) {
   )
 }
 
-function decodedHeaderAndBody(token) {
+export function decodedHeaderAndBody(token) {
   // Parse header and body
   const [header, body] = token.split('.').slice(0, 2).map(base64Decode)
 
   return [header, body]
 }
 
-function verifiedBody({ token, key }) {
+export function verifiedBody({ token, key }) {
   return jwt.verify(
     token,
     jwkToPem(key),
@@ -25,9 +25,4 @@ function verifiedBody({ token, key }) {
     },
     (err, decoded) => (err ? null : decoded)
   )
-}
-
-module.exports = {
-  decodedHeaderAndBody,
-  verifiedBody,
 }

@@ -1,6 +1,11 @@
-const { fetchResult, msqlConfig, fetchResultPg, getTransactionMssql } = require('libs/db')
-const { getSettings } = require('libs/repo')
-const mssql = require('mssql')
+import {
+  fetchResult,
+  msqlConfig,
+  fetchResultPg,
+  getTransactionMssql,
+} from '../libs/db.js'
+// import { getSettings } from '../libs/repo.js' // Checking if this file exists or removed
+import mssql from 'mssql'
 
 //example of how to use the db
 const getUser = async id => {
@@ -8,6 +13,6 @@ const getUser = async id => {
   return result
 }
 
-module.exports = {
+export default {
   getUser,
 }

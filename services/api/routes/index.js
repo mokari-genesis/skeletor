@@ -1,3 +1,3 @@
-const healthRouter = require('./health')
+import healthRouter from './health.js'
 
-module.exports = [...healthRouter]
+export default [...healthRouter]

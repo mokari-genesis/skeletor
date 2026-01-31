@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-const response = async (code, data, msg, msConn = null, pgConn = null) => {
+export const response = async (code, data, msg, msConn = null, pgConn = null) => {
   if (pgConn) {
     await pgConn.end()
   }
@@ -22,7 +22,7 @@ const response = async (code, data, msg, msConn = null, pgConn = null) => {
   }
 }
 
-const getBody = event => {
+export const getBody = event => {
   try {
     return event.body
       ? typeof event.body === 'string'
@@ -34,16 +34,10 @@ const getBody = event => {
   }
 }
 
-const normalizeKeysToLowercase = input => {
+export const normalizeKeysToLowercase = input => {
   input = input || {}
   return Object.entries(input).reduce(
     (acc, [key, value]) => ({ ...acc, [key.toLowerCase()]: value }),
     {}
   )
-}
-
-module.exports = {
-  response,
-  getBody,
-  normalizeKeysToLowercase,
 }

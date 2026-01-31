@@ -1,9 +1,10 @@
-const mssql = require('mssql')
-const { Pool } = require('pg')
-const { Logger } = require('./logger')
-const { camelizeKeys } = require('./string')
+import mssql from 'mssql'
+import pg from 'pg'
+const { Pool } = pg
+import { Logger } from './logger.js'
+import { camelizeKeys } from './string.js'
 
-const pgConfig = {
+export const pgConfig = {
   user: process.env.DATABASE_USER,
   host: process.env.DATABASE_HOST,
   database: process.env.DATABASE_NAME,
@@ -12,7 +13,7 @@ const pgConfig = {
   ssl: { rejectUnauthorized: false },
 }
 
-const msqlConfig = {
+export const msqlConfig = {
   user: process.env.MSSQL_USER,
   password: process.env.MSSQL_PASSWORD,
   database: process.env.MSSQL_NAME,
@@ -33,7 +34,7 @@ const msqlConfig = {
 
 //conection
 globalMsPool.connectedPool = null
-async function globalMsPool() {
+export async function globalMsPool() {
   if (globalMsPool.connectedPool) {
     return globalMsPool.connectedPool
   }
@@ -45,14 +46,14 @@ async function globalMsPool() {
   return globalMsPool.connectedPool
 }
 
-const getTransactionMssql = async () => new mssql.Transaction(await globalMsPool())
+export const getTransactionMssql = async () => new mssql.Transaction(await globalMsPool())
 
-const getConnectionPg = () => {
+export const getConnectionPg = () => {
   const pool = new Pool(pgConfig)
   return pool.connect()
 }
 
-const fetchResult = (query, { singleResult = false, debug = false } = {}) => {
+export const fetchResult = (query, { singleResult = false, debug = false } = {}) => {
   // "connection" can be a transaction or pool -- something with a "request()" method.
   // Pass "null" to use the global connection pool.
   return async (args, connection = null) => {
@@ -73,7 +74,7 @@ const fetchResult = (query, { singleResult = false, debug = false } = {}) => {
     }
   }
 }
-function fetchResultPg(query, { singleResult = false } = {}) {
+export function fetchResultPg(query, { singleResult = false } = {}) {
   return async (...args) => {
     const pool = new Pool(pgConfig)
     const request = await pool.connect()
@@ -91,7 +92,7 @@ function fetchResultPg(query, { singleResult = false } = {}) {
 }
 
 // PG transactions
-function transactionPG() {
+export function transactionPG() {
   return async operations => {
     const pool = new Pool(pgConfig)
     const client = await pool.connect()
@@ -130,7 +131,7 @@ function validSqlIdentifiers(names) {
  * @param {PreparedStatement} ps - Node mssql PreparedStatement object.
  * @param {Array.<String>} outputCols - Columns to output as result.
  */
-async function safeBulkInsertMS({
+export async function safeBulkInsertMS({
   table,
   records,
   types,
@@ -219,7 +220,7 @@ async function safeBulkInsertMS({
  * @param {Array.<column>} columns - Maps record keys to mssql types.
  * @param {object} ps - Node mssql PreparedStatement object.
  */
-async function safeBulkUpdateMS({ table, records, columns, ps } = {}) {
+export async function safeBulkUpdateMS({ table, records, columns, ps } = {}) {
   const columnNames = columns.map(col => col.name)
   const identifiers = [...columnNames, table]
 
@@ -296,7 +297,7 @@ async function safeBulkUpdateMS({ table, records, columns, ps } = {}) {
   }
 }
 
-async function dbOffset() {
+export async function dbOffset() {
   try {
     const request = (await globalMsPool()).request()
 
@@ -311,7 +312,7 @@ async function dbOffset() {
   }
 }
 
-function safeBulkInsertPG(table, records, keys, outputCols = []) {
+export function safeBulkInsertPG(table, records, keys, outputCols = []) {
   const identifiers = [...keys, table]
 
   // This function is intended to be used only privately by the repo, but we
@@ -333,6 +334,7 @@ function safeBulkInsertPG(table, records, keys, outputCols = []) {
     .map(x => x.map(() => `$${index++}`).join(', '))
     .map(x => `(${x})`)
     .join(',\n')
+    .join(',\n')
 
   return `
     INSERT INTO ${table} (
@@ -341,19 +343,4 @@ function safeBulkInsertPG(table, records, keys, outputCols = []) {
     VALUES ${valuesClause}
     ${outputClause}
   `
-}
-
-module.exports = {
-  pgConfig,
-  msqlConfig,
-  getTransactionMssql,
-  getConnectionPg,
-  fetchResult,
-  fetchResultPg,
-  safeBulkInsertMS,
-  safeBulkUpdateMS,
-  dbOffset,
-  globalMsPool,
-  safeBulkInsertPG,
-  transactionPG,
 }

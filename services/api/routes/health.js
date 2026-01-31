@@ -1,6 +1,6 @@
-const health = require('health')
+import * as health from '../health.js'
 
-module.exports = [
+export default [
   {
     path: 'health',
     method: 'GET',

@@ -25,7 +25,7 @@ function redConsoleError(...args) {
 const activeConsoleError =
   process.env.STAGE === 'localhost' ? redConsoleError : console.error
 
-function Logger(metadata) {
+function LoggerFn(metadata) {
   const lg =
     consoleFn =>
     (msg, data = {}) =>
@@ -40,9 +40,9 @@ function Logger(metadata) {
 }
 
 // Allow logger to be used without metadata.
-const noMetaDataLogger = Logger({})
-Logger.info = noMetaDataLogger.info
-Logger.error = noMetaDataLogger.error
-Logger.unexpected = noMetaDataLogger.unexpected
+const noMetaDataLogger = LoggerFn({})
+LoggerFn.info = noMetaDataLogger.info
+LoggerFn.error = noMetaDataLogger.error
+LoggerFn.unexpected = noMetaDataLogger.unexpected
 
-module.exports = { Logger }
+export { LoggerFn as Logger }

@@ -1,10 +1,11 @@
-const util = require('libs/utils')
-const { router } = require('./router')
-const fn = require('libs/fn')
-const { Logger } = require('libs/logger')
+import * as util from '../../libs/utils.js'
+import { router } from './router.js'
+import * as fn from '../../libs/fn.js'
+import { Logger } from '../../libs/logger.js'
+
 //const { isValidToken } = require("vendor/aws/cognito");
 
-const app = async event => {
+export const app = async event => {
   try {
     const request = fn.parseEvent(event)
 
@@ -38,7 +39,7 @@ const app = async event => {
     const email = route.public
       ? ""
       : util.getUserEmailFromAuthorization(normalizedHeaders.authorization);
-*/
+    */
     const user = {
       email: 'm@m.com',
     }
@@ -72,8 +73,4 @@ const app = async event => {
     Logger.unexpected(e, 'ERROR')
     return util.response(400, null, e.message || 'ERROR')
   }
-}
-
-module.exports = {
-  app,
 }

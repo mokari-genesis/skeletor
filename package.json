@@ -1,6 +1,7 @@
 {
   "name": "skeletor-root",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "Root configuration for Skeletor project",
   "scripts": {
