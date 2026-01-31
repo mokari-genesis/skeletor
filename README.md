@@ -1,0 +1,62 @@
+# Skeletor
+
+This project is a Serverless application structured for AWS Lambda, using shared layers and libraries.
+
+## 📂 Project Structure
+
+- **`layers/`**: Contains shared dependencies (node_modules) for all Lambda functions.
+  - `layers/node`: The primary Node.js layer. Dependencies are installed here to optimize Lambda deployment size.
+- **`libs/`**: Shared utility code used across different services (Database connections, Logging, JWT, etc.).
+- **`services/`**: Contains the actual microservices (Lambda functions).
+  - `services/api`: The core API service.
+- **`entityQueries/`**: Stores SQL queries and database usage examples.
+- **`vendor/`**: Third-party or custom logic specific to certain providers.
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+- Node.js (v18+)
+- NPM
+- Serverless Framework (optional, as it's included in layers)
+
+### 2. Installation
+
+First, install the **Tooling** (Prettier, Husky) at the root level:
+
+```bash
+npm install
+```
+
+This ensures that your code is automatically formatted when you commit.
+
+Next, install the **Runtime Dependencies** in the shared layer:
+
+```bash
+cd layers/node
+npm install
+```
+
+### 3. Running Locally
+
+To run the API service locally using `serverless-offline`:
+
+```bash
+cd services/api
+npm run local
+```
+
+The server will start at `http://localhost:3000`.
+
+## 🛠 Development Workflow
+
+### Formatting
+
+We use **Prettier** to enforce code style. This is configured to run automatically:
+
+- **On Commit**: Husky and lint-staged will automatically format your changed files.
+- **Manual**: Run `npm run format` in the root directory to format the entire project.
+
+### Adding Dependencies
+
+If you need to add a dependency that is shared across services, add it to `layers/node/package.json` and run `npm install` there.
