@@ -1,4 +1,8 @@
-# Skeletor
+# Skeletor (ESM Version)
+
+> [!NOTE]
+> This branch (`man-esm`) uses **ECMAScript Modules (ESM)**.
+> For the CommonJS version, please switch to the `main` branch.
 
 This project is a Serverless application structured for AWS Lambda, using shared layers and libraries.
 
@@ -60,3 +64,10 @@ We use **Prettier** to enforce code style. This is configured to run automatical
 ### Adding Dependencies
 
 If you need to add a dependency that is shared across services, add it to `layers/node/package.json` and run `npm install` there.
+
+### Imports
+
+Since this branch uses ESM:
+
+- Use `import` / `export` syntax.
+- Always include file extensions for local imports (e.g., `import utils from '../../libs/utils.js'`).
