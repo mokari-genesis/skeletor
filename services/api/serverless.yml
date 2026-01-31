@@ -1,0 +1,85 @@
+service: appTracker
+plugins:
+  - serverless-offline
+
+custom:
+  defaultNodePath: '../../layers/node/node_modules'
+  nodePathLib: '../layers/node/node_modules'
+
+  localhost:
+    environment:
+      NODE_PATH: ${self:custom.nodePathLib}:${self:custom.defaultNodePath}:../..:.
+      handlerPath: ../../
+
+  stages:
+    secrets:
+      production: 'production' # --stage=production
+      other: 'dev' # anything else
+    current: ${self:custom.stages.secrets.${opt:stage}, self:custom.stages.secrets.other}
+
+  apisecret: ${ssm:/aws/reference/secretsmanager/dev/kairo}
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  nodeOptions:
+    # Required to enable fetch on node 18.
+    - --enable-undici
+  versionFunctions: true
+  stage: ${opt:stage}
+  region: us-east-1
+  deploymentBucket:
+    name: ${self:custom.apisecret.BUCKET}
+
+  environment:
+    #ACCOUNT_ID: ${self:custom.apisecret.ACCOUNT_ID}
+    #AWS_POOL_ID: ${self:custom.apisecret.AWS_POOL_ID}
+    NODE_PATH: ${self:custom.${opt:stage}.environment.NODE_PATH, ''}
+    STAGE: ${self:provider.stage}
+    CURRENT_ENV: ${self:provider.stage}
+    #DATABASE_HOST: ${self:custom.pgsecret.HOST}
+    #DATABASE_USER: ${self:custom.pgsecret.USERNAME}
+    #DATABASE_NAME: ${self:custom.pgsecret.DBNAME}
+    #DATABASE_PASSWORD: ${self:custom.pgsecret.PASSWORD}
+    #DATABASE_PORT: ${self:custom.pgsecret.PORT}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeAsync
+        - lambda:InvokeFunction
+
+      Resource: '*'
+
+package:
+  include:
+    - ../../libs/**
+    - ../../vendor/**
+    - ../../entityQueries/**
+    - ../../utils/**
+  exclude:
+    - node_modules/**
+
+functions:
+  proxy:
+    timeout: 30
+    memorySize: 2048
+    handler: handler.app
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors:
+            origin: '*'
+            allowCredentials: false
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - app_id
+              - device_id
+    #layers:
+    #  - ${self:custom.apisecret.LAYERS}
