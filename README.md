@@ -70,4 +70,5 @@ If you need to add a dependency that is shared across services, add it to `layer
 Since this branch uses ESM:
 
 - Use `import` / `export` syntax.
-- Always include file extensions for local imports (e.g., `import utils from '../../libs/utils.js'`).
+- We simulate absolute imports by symlinking `libs`. You can import directly from `libs/` (e.g., `import utils from 'libs/utils.js'`).
+- Always include file extensions for local imports.

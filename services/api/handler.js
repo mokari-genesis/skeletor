@@ -1,7 +1,7 @@
-import * as util from '../../libs/utils.js'
+import * as util from 'libs/utils.js'
 import { router } from './router.js'
-import * as fn from '../../libs/fn.js'
-import { Logger } from '../../libs/logger.js'
+import * as fn from 'libs/fn.js'
+import { Logger } from 'libs/logger.js'
 
 //const { isValidToken } = require("vendor/aws/cognito");
 

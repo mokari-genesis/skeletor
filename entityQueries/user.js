@@ -1,9 +1,4 @@
-import {
-  fetchResult,
-  msqlConfig,
-  fetchResultPg,
-  getTransactionMssql,
-} from '../libs/db.js'
+import { fetchResult, msqlConfig, fetchResultPg, getTransactionMssql } from 'libs/db.js'
 // import { getSettings } from '../libs/repo.js' // Checking if this file exists or removed
 import mssql from 'mssql'
 
